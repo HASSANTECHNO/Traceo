@@ -16,6 +16,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +35,7 @@ private val TextMain = Color(0xFFF4F7FF)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { TraceoApp() }
+        setContent { CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) { TraceoApp() } }
     }
 }
 
@@ -43,26 +45,27 @@ private data class Service(
     val emoji: String,
     val category: Category,
     val description: String,
-    val openUrl: (String) -> String?
+    val packageName: String,
+    val openUrl: (String) -> String? = { null }
 )
 
 private val services = listOf(
-    Service("بله", "🟢", Category.IRANIAN, "بررسی خودکار عمومی در دسترس نیست") { null },
-    Service("روبیکا", "🟣", Category.IRANIAN, "بررسی خودکار عمومی در دسترس نیست") { null },
-    Service("ایتا", "🟠", Category.IRANIAN, "بررسی خودکار عمومی در دسترس نیست") { null },
-    Service("سروش پلاس", "🔵", Category.IRANIAN, "بررسی خودکار عمومی در دسترس نیست") { null },
-    Service("شاد", "🎓", Category.IRANIAN, "بررسی خودکار عمومی در دسترس نیست") { null },
-    Service("آی‌گپ", "💬", Category.IRANIAN, "بررسی خودکار عمومی در دسترس نیست") { null },
-    Service("WhatsApp", "🟢", Category.INTERNATIONAL, "بازکردن لینک، وجود حساب را تأیید نمی‌کند") { n -> "https://wa.me/" + n.removePrefix("+") },
-    Service("Telegram", "🔹", Category.INTERNATIONAL, "بازکردن تلگرام؛ تابع تنظیمات حریم خصوصی") { n -> "tg://resolve?phone=" + n.removePrefix("+") },
-    Service("Signal", "🔒", Category.INTERNATIONAL, "بررسی خودکار عمومی در دسترس نیست") { null },
-    Service("Viber", "🟣", Category.INTERNATIONAL, "لینک مستقیم ممکن است روی بعضی دستگاه‌ها کار نکند") { n -> "viber://chat?number=" + Uri.encode(n) },
-    Service("LINE", "🟩", Category.INTERNATIONAL, "بررسی خودکار عمومی در دسترس نیست") { null },
-    Service("WeChat", "🟢", Category.INTERNATIONAL, "بررسی خودکار عمومی در دسترس نیست") { null },
-    Service("Instagram", "📸", Category.INTERNATIONAL, "از روی شماره تلفن قابل تأیید عمومی نیست") { null },
-    Service("Messenger", "🔵", Category.INTERNATIONAL, "از روی شماره تلفن قابل تأیید عمومی نیست") { null },
-    Service("Snapchat", "👻", Category.INTERNATIONAL, "بررسی خودکار عمومی در دسترس نیست") { null },
-    Service("Discord", "🎮", Category.INTERNATIONAL, "بررسی خودکار عمومی در دسترس نیست") { null }
+    Service("بله", "🟢", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "ir.nasim"),
+    Service("روبیکا", "🟣", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "ir.resaneh1.iptv"),
+    Service("ایتا", "🟠", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "ir.eitaa.messenger"),
+    Service("سروش پلاس", "🔵", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "mobi.mmdt.ottplus"),
+    Service("شاد", "🎓", Category.IRANIAN, "بازکردن برنامه؛ امکان پیدا کردن افراد تابع امکانات شاد است", "ir.medu.shad"),
+    Service("آی‌گپ", "💬", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", " mobi.igap".trim()),
+    Service("WhatsApp", "🟢", Category.INTERNATIONAL, "بازکردن گفت‌وگو با شماره؛ وجود حساب را تضمین نمی‌کند", "com.whatsapp") { n -> "https://wa.me/" + n.removePrefix("+") },
+    Service("Telegram", "🔹", Category.INTERNATIONAL, "بازکردن تلگرام با شماره؛ ممکن است حریم خصوصی مانع شود", "org.telegram.messenger") { n -> "tg://resolve?phone=" + n.removePrefix("+") },
+    Service("Signal", "🔒", Category.INTERNATIONAL, "بازکردن برنامه؛ پیوند شماره ممکن است در دسترس نباشد", "org.thoughtcrime.securesms") { n -> "https://signal.me/#p/" + Uri.encode(n) },
+    Service("Viber", "🟣", Category.INTERNATIONAL, "بازکردن گفت‌وگو با شماره در صورت پشتیبانی نسخه نصب‌شده", "com.viber.voip") { n -> "viber://chat?number=" + Uri.encode(n) },
+    Service("LINE", "🟩", Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی شماره تابع تنظیمات LINE است", "jp.naver.line.android"),
+    Service("WeChat", "🟢", Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی شماره داخل WeChat", "com.tencent.mm"),
+    Service("Instagram", "📸", Category.INTERNATIONAL, "بازکردن برنامه؛ پیدا کردن حساب با شماره تضمین‌شده نیست", "com.instagram.android"),
+    Service("Messenger", "🔵", Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی مخاطب تابع تنظیمات Meta است", "com.facebook.orca"),
+    Service("Snapchat", "👻", Category.INTERNATIONAL, "بازکردن برنامه؛ یافتن حساب با شماره تضمین‌شده نیست", "com.snapchat.android"),
+    Service("Discord", "🎮", Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی شماره تلفن پشتیبانی عمومی ندارد", "com.discord")
 )
 
 internal fun normalizeIranPhone(raw: String): String? {
@@ -104,7 +107,7 @@ private fun TraceoApp() {
                         Spacer(Modifier.width(12.dp))
                         Column {
                             Text("TRACEO", color = TextMain, fontSize = 24.sp, fontWeight = FontWeight.Black, letterSpacing = 3.sp)
-                            Text("Phone service navigator", color = Muted, fontSize = 12.sp)
+                            Text("راهنمای پیام‌رسان‌ها", color = Muted, fontSize = 12.sp)
                         }
                     }
                 }
@@ -114,7 +117,7 @@ private fun TraceoApp() {
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Text("جست‌وجوی شماره", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                        Text("شماره ایرانی را وارد کن تا سرویس‌ها و لینک‌های بازکردن آن‌ها را ببینی.", color = Muted, fontSize = 13.sp)
+                        Text("شماره موبایل را وارد کن و هر پیام‌رسان را مستقیم باز کن.", color = Muted, fontSize = 13.sp)
                         OutlinedTextField(
                             value = phone,
                             onValueChange = { phone = it; error = null },
@@ -157,7 +160,7 @@ private fun TraceoApp() {
                     }
                     item { SectionTitle("پیام‌رسان‌های ایرانی") }
                     items(services.filter { it.category == Category.IRANIAN }) { service ->
-                        ServiceCard(service, normalized!!) { url -> openUrl(context, url) }
+                        ServiceCard(service, normalized!!) { selected -> openService(context, selected, normalized!!) }
                     }
                     item { SectionTitle("سرویس‌های بین‌المللی") }
                     items(services.filter { it.category == Category.INTERNATIONAL }) { service ->
