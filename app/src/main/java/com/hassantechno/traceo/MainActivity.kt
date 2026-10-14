@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -42,7 +44,7 @@ class MainActivity : ComponentActivity() {
 private enum class Category { IRANIAN, INTERNATIONAL }
 private data class Service(
     val name: String,
-    val emoji: String,
+    val iconRes: Int,
     val category: Category,
     val description: String,
     val packageName: String,
@@ -50,22 +52,22 @@ private data class Service(
 )
 
 private val services = listOf(
-    Service("بله", "🟢", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "ir.nasim"),
-    Service("روبیکا", "🟣", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "ir.resaneh1.iptv"),
-    Service("ایتا", "🟠", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "ir.eitaa.messenger"),
-    Service("سروش پلاس", "🔵", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "mobi.mmdt.ottplus"),
-    Service("شاد", "🎓", Category.IRANIAN, "بازکردن برنامه؛ امکان پیدا کردن افراد تابع امکانات شاد است", "ir.medu.shad"),
-    Service("آی‌گپ", "💬", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "mobi.igap"),
-    Service("WhatsApp", "🟢", Category.INTERNATIONAL, "بازکردن گفت‌وگو با شماره؛ وجود حساب را تضمین نمی‌کند", "com.whatsapp") { n -> "https://wa.me/" + n.removePrefix("+") },
-    Service("Telegram", "🔹", Category.INTERNATIONAL, "بازکردن تلگرام با شماره؛ ممکن است حریم خصوصی مانع شود", "org.telegram.messenger") { n -> "tg://resolve?phone=" + n.removePrefix("+") },
-    Service("Signal", "🔒", Category.INTERNATIONAL, "بازکردن برنامه؛ پیوند شماره ممکن است در دسترس نباشد", "org.thoughtcrime.securesms") { n -> "https://signal.me/#p/" + Uri.encode(n) },
-    Service("Viber", "🟣", Category.INTERNATIONAL, "بازکردن گفت‌وگو با شماره در صورت پشتیبانی نسخه نصب‌شده", "com.viber.voip") { n -> "viber://chat?number=" + Uri.encode(n) },
-    Service("LINE", "🟩", Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی شماره تابع تنظیمات LINE است", "jp.naver.line.android"),
-    Service("WeChat", "🟢", Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی شماره داخل WeChat", "com.tencent.mm"),
-    Service("Instagram", "📸", Category.INTERNATIONAL, "بازکردن برنامه؛ پیدا کردن حساب با شماره تضمین‌شده نیست", "com.instagram.android"),
-    Service("Messenger", "🔵", Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی مخاطب تابع تنظیمات Meta است", "com.facebook.orca"),
-    Service("Snapchat", "👻", Category.INTERNATIONAL, "بازکردن برنامه؛ یافتن حساب با شماره تضمین‌شده نیست", "com.snapchat.android"),
-    Service("Discord", "🎮", Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی شماره تلفن پشتیبانی عمومی ندارد", "com.discord")
+    Service("بله", R.drawable.ic_bale, Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "ir.nasim"),
+    Service("روبیکا", R.drawable.ic_rubika, Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "ir.resaneh1.iptv"),
+    Service("ایتا", R.drawable.ic_eitaa, Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "ir.eitaa.messenger"),
+    Service("سروش پلاس", R.drawable.ic_soroush, Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "mobi.mmdt.ottplus"),
+    Service("شاد", R.drawable.ic_shad, Category.IRANIAN, "بازکردن برنامه؛ امکان پیدا کردن افراد تابع امکانات شاد است", "ir.medu.shad"),
+    Service("آی‌گپ", R.drawable.ic_igap, Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "mobi.igap"),
+    Service("WhatsApp", R.drawable.ic_whatsapp, Category.INTERNATIONAL, "بازکردن گفت‌وگو با شماره؛ وجود حساب را تضمین نمی‌کند", "com.whatsapp") { n -> "https://wa.me/" + n.removePrefix("+") },
+    Service("Telegram", R.drawable.ic_telegram, Category.INTERNATIONAL, "بازکردن تلگرام با شماره؛ ممکن است حریم خصوصی مانع شود", "org.telegram.messenger") { n -> "tg://resolve?phone=" + n.removePrefix("+") },
+    Service("Signal", R.drawable.ic_signal, Category.INTERNATIONAL, "بازکردن برنامه؛ پیوند شماره ممکن است در دسترس نباشد", "org.thoughtcrime.securesms") { n -> "https://signal.me/#p/" + Uri.encode(n) },
+    Service("Viber", R.drawable.ic_viber, Category.INTERNATIONAL, "بازکردن گفت‌وگو با شماره در صورت پشتیبانی نسخه نصب‌شده", "com.viber.voip") { n -> "viber://chat?number=" + Uri.encode(n) },
+    Service("LINE", R.drawable.ic_line, Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی شماره تابع تنظیمات LINE است", "jp.naver.line.android"),
+    Service("WeChat", R.drawable.ic_wechat, Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی شماره داخل WeChat", "com.tencent.mm"),
+    Service("Instagram", R.drawable.ic_instagram, Category.INTERNATIONAL, "بازکردن برنامه؛ پیدا کردن حساب با شماره تضمین‌شده نیست", "com.instagram.android"),
+    Service("Messenger", R.drawable.ic_messenger, Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی مخاطب تابع تنظیمات Meta است", "com.facebook.orca"),
+    Service("Snapchat", R.drawable.ic_snapchat, Category.INTERNATIONAL, "بازکردن برنامه؛ یافتن حساب با شماره تضمین‌شده نیست", "com.snapchat.android"),
+    Service("Discord", R.drawable.ic_discord, Category.INTERNATIONAL, "بازکردن برنامه؛ جست‌وجوی شماره تلفن پشتیبانی عمومی ندارد", "com.discord")
 )
 
 internal fun normalizeIranPhone(raw: String): String? {
@@ -102,7 +104,7 @@ private fun TraceoApp() {
                 item {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(Modifier.size(48.dp).background(Accent, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
-                            Text("T", color = Background, fontWeight = FontWeight.Black, fontSize = 28.sp)
+                            Image(painter = painterResource(R.drawable.ic_traceo_foreground), contentDescription = "Traceo", modifier = Modifier.size(44.dp))
                         }
                         Spacer(Modifier.width(12.dp))
                         Column {
@@ -195,7 +197,7 @@ private fun ServiceCard(service: Service, phone: String, onOpen: (Service) -> Un
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(Modifier.size(42.dp).background(Color(0xFF202B45), CircleShape), contentAlignment = Alignment.Center) {
-            Text(service.emoji, fontSize = 20.sp)
+            Image(painter = painterResource(service.iconRes), contentDescription = service.name, modifier = Modifier.size(30.dp))
         }
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
