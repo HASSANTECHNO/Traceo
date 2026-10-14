@@ -18,8 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -57,7 +55,7 @@ private val services = listOf(
     Service("ایتا", "🟠", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "ir.eitaa.messenger"),
     Service("سروش پلاس", "🔵", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "mobi.mmdt.ottplus"),
     Service("شاد", "🎓", Category.IRANIAN, "بازکردن برنامه؛ امکان پیدا کردن افراد تابع امکانات شاد است", "ir.medu.shad"),
-    Service("آی‌گپ", "💬", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", " mobi.igap".trim()),
+    Service("آی‌گپ", "💬", Category.IRANIAN, "بازکردن برنامه؛ جست‌وجوی شماره داخل خود پیام‌رسان", "mobi.igap"),
     Service("WhatsApp", "🟢", Category.INTERNATIONAL, "بازکردن گفت‌وگو با شماره؛ وجود حساب را تضمین نمی‌کند", "com.whatsapp") { n -> "https://wa.me/" + n.removePrefix("+") },
     Service("Telegram", "🔹", Category.INTERNATIONAL, "بازکردن تلگرام با شماره؛ ممکن است حریم خصوصی مانع شود", "org.telegram.messenger") { n -> "tg://resolve?phone=" + n.removePrefix("+") },
     Service("Signal", "🔒", Category.INTERNATIONAL, "بازکردن برنامه؛ پیوند شماره ممکن است در دسترس نباشد", "org.thoughtcrime.securesms") { n -> "https://signal.me/#p/" + Uri.encode(n) },
