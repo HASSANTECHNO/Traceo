@@ -18,6 +18,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -164,7 +166,7 @@ private fun TraceoApp() {
                     }
                     item { SectionTitle("سرویس‌های بین‌المللی") }
                     items(services.filter { it.category == Category.INTERNATIONAL }) { service ->
-                        ServiceCard(service, normalized!!) { url -> openUrl(context, url) }
+                        ServiceCard(service, normalized!!) { selected -> openService(context, selected, normalized!!) }
                     }
                 } else {
                     item {
@@ -189,8 +191,7 @@ private fun SectionTitle(title: String) {
 }
 
 @Composable
-private fun ServiceCard(service: Service, phone: String, onOpen: (String) -> Unit) {
-    val url = service.openUrl(phone)
+private fun ServiceCard(service: Service, phone: String, onOpen: (Service) -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth().background(SurfaceColor, RoundedCornerShape(18.dp)).padding(14.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -204,16 +205,34 @@ private fun ServiceCard(service: Service, phone: String, onOpen: (String) -> Uni
             Text(service.description, color = Muted, fontSize = 11.sp, lineHeight = 15.sp)
             Text("وضعیت حساب: نامشخص", color = Color(0xFFFFD28A), fontSize = 11.sp, fontWeight = FontWeight.Medium)
         }
-        if (url != null) {
-            TextButton(onClick = { onOpen(url) }) { Text("بازکردن", color = Accent, fontWeight = FontWeight.Bold) }
-        }
+        TextButton(onClick = { onOpen(service) }) { Text("بازکردن", color = Accent, fontWeight = FontWeight.Bold) }
     }
 }
 
-private fun openUrl(context: Context, url: String) {
-    try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-    } catch (_: Exception) {
-        // Some apps may not be installed or may not handle the deep link.
+private fun openService(context: Context, service: Service, phone: String) {
+    val deepLink = service.openUrl(phone)
+    if (deepLink != null) {
+        try {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(deepLink)))
+            return
+        } catch (_: Exception) {
+            // Fall back to opening the installed app.
+        }
     }
+
+    val launchIntent = context.packageManager.getLaunchIntentForPackage(service.packageName)
+    if (launchIntent != null) {
+        try {
+            context.startActivity(launchIntent)
+            return
+        } catch (_: Exception) {
+            // Fall through to the user-facing message below.
+        }
+    }
+
+    android.widget.Toast.makeText(
+        context,
+        "برنامه ${service.name} نصب نیست یا قابل بازشدن نیست.",
+        android.widget.Toast.LENGTH_LONG
+    ).show()
 }
