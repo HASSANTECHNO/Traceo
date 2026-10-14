@@ -65,8 +65,9 @@ private val services = listOf(
     Service("Discord", "🎮", Category.INTERNATIONAL, "بررسی خودکار عمومی در دسترس نیست") { null }
 )
 
-private fun normalizeIranPhone(raw: String): String? {
-    val digits = raw.filter(Char::isDigit)
+internal fun normalizeIranPhone(raw: String): String? {
+    // Convert Persian/Arabic-Indic numerals to ASCII and ignore separators.
+    val digits = raw.mapNotNull { it.digitToIntOrNull()?.digitToChar() }.joinToString("")
     val national = when {
         digits.startsWith("0098") -> digits.drop(4)
         digits.startsWith("98") -> digits.drop(2)
