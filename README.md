@@ -6,12 +6,23 @@ Traceo is an Android app built with Kotlin, Jetpack Compose, and Material 3. It 
 
 Traceo does not claim to discover accounts from a phone number unless a service provides a legitimate, verifiable method. Most services do not expose a public account-existence API. The UI reports account status as Unknown rather than guessing. Opening a service link is not proof that an account exists.
 
-## Open in Android Studio
+## Build and test
 
-1. Clone or download this repository.
-2. Open the project root (the folder containing settings.gradle.kts) in Android Studio.
-3. Use JDK 17 or the JDK required by your installed Android Gradle Plugin.
-4. Sync Gradle and run the app on an Android device or emulator.
+The repository includes the Gradle Wrapper, pinned to Gradle 9.8.1. Open the project root (the folder containing `settings.gradle.kts`) in Android Studio and sync Gradle with JDK 17.
+
+On Windows, run:
+
+```powershell
+.\gradlew.bat testDebugUnitTest assembleDebug
+```
+
+On Linux or macOS, run:
+
+```bash
+./gradlew testDebugUnitTest assembleDebug
+```
+
+GitHub Actions runs the same tests and build and publishes the debug APK as the `traceo-debug-apk` workflow artifact.
 
 ## Current scope
 
