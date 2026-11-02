@@ -13,10 +13,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -134,83 +137,114 @@ private fun SimpleHome(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 28.dp),
+            .padding(horizontal = 24.dp, vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(R.drawable.ic_traceo_foreground),
-            contentDescription = "لوگوی Traceo",
-            modifier = Modifier.size(58.dp)
-        )
-        Spacer(Modifier.height(12.dp))
-        Text(
-            "Traceo",
-            color = TextMain,
-            fontSize = 29.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(Modifier.height(6.dp))
-        Text(
-            "یک شماره، همه پیام‌رسان‌ها",
-            color = Muted,
-            fontSize = 13.sp,
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.height(32.dp))
-        OutlinedTextField(
-            value = phone,
-            onValueChange = onPhoneChange,
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            label = { Text("شماره موبایل ایران") },
-            placeholder = { Text("09123456789") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            leadingIcon = {
-                Text(
-                    "+98",
-                    color = Cyan,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            },
-            shape = RoundedCornerShape(16.dp),
-            isError = error != null,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Cyan,
-                unfocusedBorderColor = Color(0xFF31506A),
-                focusedLabelColor = Cyan,
-                cursorColor = Cyan
-            )
-        )
-        if (error != null) {
-            Spacer(Modifier.height(8.dp))
-            Text(
-                error,
-                color = Color(0xFFFF8585),
-                fontSize = 12.sp,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
+        Box(
+            modifier = Modifier
+                .size(76.dp)
+                .background(Color(0xFF102B42), CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_traceo_foreground),
+                contentDescription = "لوگوی Traceo",
+                modifier = Modifier.size(54.dp)
             )
         }
         Spacer(Modifier.height(16.dp))
-        Button(
-            onClick = onSearch,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Accent)
-        ) {
-            Text("پیدا کن", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
-        }
-        Spacer(Modifier.height(20.dp))
+        Text("Traceo", color = TextMain, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(8.dp))
         Text(
-            "شماره‌ات روی دستگاه می‌ماند؛ Traceo آن را به سرور ارسال نمی‌کند.",
+            "شروع گفتگو، بدون ذخیره شماره",
             color = Muted,
-            fontSize = 11.sp,
+            fontSize = 14.sp,
             textAlign = TextAlign.Center
         )
+        Spacer(Modifier.height(28.dp))
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(28.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF101E2D)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Text(
+                    "شماره موبایل",
+                    color = TextMain,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+                OutlinedTextField(
+                    value = phone,
+                    onValueChange = onPhoneChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    placeholder = { Text("0912 345 6789", color = Muted) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    leadingIcon = {
+                        Text(
+                            "+98",
+                            color = Cyan,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    },
+                    shape = RoundedCornerShape(18.dp),
+                    isError = error != null,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Cyan,
+                        unfocusedBorderColor = Color(0xFF34485D),
+                        focusedLabelColor = Cyan,
+                        cursorColor = Cyan,
+                        focusedTextColor = TextMain,
+                        unfocusedTextColor = TextMain
+                    )
+                )
+                if (error != null) {
+                    Text(error, color = Color(0xFFFF8585), fontSize = 12.sp)
+                }
+                Button(
+                    onClick = onSearch,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(54.dp),
+                    shape = RoundedCornerShape(18.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Accent)
+                ) {
+                    Text("پیدا کن", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                }
+                Text(
+                    "یک میان‌بر ساده برای رفتن به چت در پیام‌رسان دلخواهت.",
+                    color = Muted,
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+        Spacer(Modifier.height(18.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Icon(
+                imageVector = androidx.compose.material.icons.Icons.Outlined.Lock,
+                contentDescription = null,
+                tint = Muted,
+                modifier = Modifier.size(14.dp)
+            )
+            Text(
+                "شماره روی دستگاه می‌ماند و به سرور ارسال نمی‌شود.",
+                color = Muted,
+                fontSize = 11.sp,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
@@ -233,28 +267,109 @@ private fun PopularServiceCard(service: Service, modifier: Modifier, onClick: ()
 
 @Composable
 private fun ServiceTile(service: Service, modifier: Modifier, onClick: () -> Unit) {
-    Row(modifier.background(SurfaceColor, RoundedCornerShape(17.dp)).clickable(onClick = onClick).padding(horizontal = 10.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Image(painterResource(service.iconRes), service.name, Modifier.size(34.dp).background(Color(0xFF0A1726), RoundedCornerShape(10.dp)).padding(3.dp))
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-            Text(service.name, color = TextMain, fontSize = 11.sp, fontWeight = FontWeight.SemiBold, maxLines = 1)
-            Text("بازکردن", color = Muted, fontSize = 10.sp)
+    Card(
+        modifier = modifier
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF111F2E)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 18.dp, horizontal = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(54.dp)
+                    .background(Color(0xFF091522), CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(service.iconRes),
+                    contentDescription = service.name,
+                    modifier = Modifier.size(38.dp)
+                )
+            }
+            Text(
+                service.name,
+                color = TextMain,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+                maxLines = 1
+            )
+            Text(
+                "بازکردن",
+                color = service.accent,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Medium
+            )
         }
-        Text("‹", color = Muted, fontSize = 22.sp)
     }
 }
 
 @Composable
 private fun ResultsScreen(phone: String?, onBack: () -> Unit, onSelect: (Service) -> Unit) {
-    Column(Modifier.fillMaxSize().padding(20.dp)) {
-        Text("‹ بازگشت", color = Cyan, modifier = Modifier.clickable(onClick = onBack).padding(8.dp))
-        Text("نتایج جست‌وجو", color = TextMain, fontSize = 25.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(8.dp))
-        Text(if (phone == null) "هنوز شماره‌ای وارد نشده است." else "شماره: $phone", color = Muted, fontSize = 13.sp)
-        Spacer(Modifier.height(14.dp))
-        Text("برای بررسی، پیام‌رسان را باز کن؛ Traceo وجود حساب را مستقلاً تأیید نمی‌کند.", color = Muted, fontSize = 12.sp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 18.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 14.dp, bottom = 18.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                "بازگشت",
+                color = Cyan,
+                modifier = Modifier
+                    .clickable(onClick = onBack)
+                    .padding(vertical = 8.dp, end = 12.dp),
+                fontSize = 14.sp
+            )
+            Spacer(Modifier.width(8.dp))
+            Column {
+                Text(
+                    "انتخاب پیام‌رسان",
+                    color = TextMain,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    phone ?: "شماره وارد نشده",
+                    color = Muted,
+                    fontSize = 13.sp
+                )
+            }
+        }
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(18.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF10283B))
+        ) {
+            Text(
+                "برای شروع گفتگو، برنامه‌ی موردنظرت را انتخاب کن.",
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+                color = Color(0xFFD5E8F8),
+                fontSize = 13.sp
+            )
+        }
         Spacer(Modifier.height(16.dp))
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            items(services) { service -> ServiceTile(service, Modifier.fillMaxWidth()) { onSelect(service) } }
+        LazyVerticalGrid(
+            columns = androidx.compose.foundation.lazy.grid.GridCells.Fixed(3),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(services) { service ->
+                ServiceTile(service, Modifier.fillMaxWidth()) { onSelect(service) }
+            }
         }
     }
 }
