@@ -99,7 +99,7 @@ private fun TraceoApp() {
                 } else if (tab == 2) {
                     AboutScreen()
                 } else if (tab == 1) {
-                    ResultsScreen(normalized, onBack = { tab = 0 }) { selected = it }
+                    ResultsScreen(normalized, onBack = { tab = 0 }) { service -> openService(context, service, normalized) }
                 } else {
                     SimpleHome(
                         phone = phone,
@@ -202,7 +202,7 @@ private fun SimpleHome(
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Accent)
         ) {
-            Text("ادامه", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+            Text("پیدا کن", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
         }
         Spacer(Modifier.height(20.dp))
         Text(
