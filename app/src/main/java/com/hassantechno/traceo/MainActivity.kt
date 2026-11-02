@@ -101,58 +101,116 @@ private fun TraceoApp() {
                 } else if (tab == 1) {
                     ResultsScreen(normalized, onBack = { tab = 0 }) { selected = it }
                 } else {
-                    Column(Modifier.fillMaxSize()) {
-                        LazyColumn(Modifier.weight(1f).fillMaxWidth(), contentPadding = PaddingValues(start = 18.dp, end = 18.dp, top = 20.dp, bottom = 18.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            item {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Box(Modifier.size(54.dp).background(Color(0xFF0C263B), RoundedCornerShape(18.dp)), contentAlignment = Alignment.Center) {
-                                        Image(painterResource(R.drawable.ic_traceo_foreground), "لوگوی Traceo", Modifier.size(48.dp))
-                                    }
-                                    Spacer(Modifier.width(12.dp))
-                                    Column(Modifier.weight(1f)) {
-                                        Text("Traceo", color = TextMain, fontSize = 27.sp, fontWeight = FontWeight.ExtraBold)
-                                        Text("جست‌وجوی شماره در پیام‌رسان‌ها", color = Muted, fontSize = 12.sp)
-                                    }
-                                    Text("↻", color = TextMain, fontSize = 25.sp, modifier = Modifier.clickable { phone = ""; normalized = null; error = null }.padding(8.dp))
-                                }
+                    SimpleHome(
+                        phone = phone,
+                        error = error,
+                        onPhoneChange = { phone = it; error = null },
+                        onSearch = {
+                            val result = normalizeIranPhone(phone)
+                            if (result == null) {
+                                error = "شماره معتبر نیست؛ شماره را با 09 یا +989 وارد کن."
+                                normalized = null
+                            } else {
+                                normalized = result
+                                error = null
+                                tab = 1
                             }
-                            item {
-                                Column(Modifier.fillMaxWidth().background(SurfaceColor.copy(alpha = .97f), RoundedCornerShape(24.dp)).padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                                    Text("شماره موبایل", color = TextMain, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                                    Text("شماره را وارد کن و پیام‌رسان موردنظرت را باز کن.", color = Muted, fontSize = 12.sp)
-                                    OutlinedTextField(value = phone, onValueChange = { phone = it; error = null }, modifier = Modifier.fillMaxWidth(), singleLine = true, label = { Text("شماره موبایل ایران") }, placeholder = { Text("09123456789") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone), leadingIcon = { Text("+98", color = Cyan, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 10.dp)) }, shape = RoundedCornerShape(15.dp), isError = error != null, colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Cyan, unfocusedBorderColor = Color(0xFF31506A), focusedLabelColor = Cyan, cursorColor = Cyan))
-                                    if (error != null) Text(error!!, color = Color(0xFFFF8585), fontSize = 12.sp)
-                                    Button(onClick = {
-                                        val result = normalizeIranPhone(phone)
-                                        if (result == null) { error = "شماره معتبر نیست؛ شماره را با 09 یا +989 وارد کن."; normalized = null }
-                                        else { normalized = result; error = null; tab = 1 }
-                                    }, modifier = Modifier.fillMaxWidth().height(54.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = Accent)) {
-                                        Text("بررسی در پیام‌رسان‌ها  ⌕", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                                    }
-                                }
-                            }
-                            item { SectionTitle("پیام‌رسان‌های پرکاربرد", "انتخاب کن و ادامه بده") }
-                            item {
-                                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                                    listOf(services[6], services[7], services[8], services[9]).forEach { service ->
-                                        PopularServiceCard(service, Modifier.weight(1f)) { selected = service }
-                                    }
-                                }
-                            }
-                            item { SectionTitle("همه پیام‌رسان‌ها", "ایرانی و بین‌المللی") }
-                            items(services.chunked(2)) { pair ->
-                                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                                    pair.forEach { service -> ServiceTile(service, Modifier.weight(1f)) { selected = service } }
-                                    if (pair.size == 1) Spacer(Modifier.weight(1f))
-                                }
-                            }
-                            item { Text("Traceo فقط پیام‌رسان را باز می‌کند؛ وجود حساب به تنظیمات حریم خصوصی و امکانات همان سرویس بستگی دارد.", color = Muted, fontSize = 11.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = 4.dp)) }
                         }
-                        BottomNavigationBar(tab) { tab = it }
-                    }
+                    )
+                    BottomNavigationBar(tab) { tab = it }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SimpleHome(
+    phone: String,
+    error: String?,
+    onPhoneChange: (String) -> Unit,
+    onSearch: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp, vertical = 28.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_traceo_foreground),
+            contentDescription = "لوگوی Traceo",
+            modifier = Modifier.size(58.dp)
+        )
+        Spacer(Modifier.height(12.dp))
+        Text(
+            "Traceo",
+            color = TextMain,
+            fontSize = 29.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            "یک شماره، همه پیام‌رسان‌ها",
+            color = Muted,
+            fontSize = 13.sp,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(32.dp))
+        OutlinedTextField(
+            value = phone,
+            onValueChange = onPhoneChange,
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            label = { Text("شماره موبایل ایران") },
+            placeholder = { Text("09123456789") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+            leadingIcon = {
+                Text(
+                    "+98",
+                    color = Cyan,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            },
+            shape = RoundedCornerShape(16.dp),
+            isError = error != null,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Cyan,
+                unfocusedBorderColor = Color(0xFF31506A),
+                focusedLabelColor = Cyan,
+                cursorColor = Cyan
+            )
+        )
+        if (error != null) {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                error,
+                color = Color(0xFFFF8585),
+                fontSize = 12.sp,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        Spacer(Modifier.height(16.dp))
+        Button(
+            onClick = onSearch,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Accent)
+        ) {
+            Text("ادامه", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+        }
+        Spacer(Modifier.height(20.dp))
+        Text(
+            "شماره‌ات روی دستگاه می‌ماند؛ Traceo آن را به سرور ارسال نمی‌کند.",
+            color = Muted,
+            fontSize = 11.sp,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
