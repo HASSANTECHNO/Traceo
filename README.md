@@ -1,40 +1,61 @@
-# Traceo
+# ✨ Traceo | تریسئو
 
-Traceo is an Android app built with Kotlin, Jetpack Compose, and Material 3. It normalizes Iranian mobile numbers and lists Iranian and international messaging/social services with best-effort deep links.
+<p align="center">
+  <strong>شروع گفتگو، بدون ذخیره‌کردن شماره</strong>
+  <br />
+  راهی ساده برای بازکردن پیام‌رسان دلخواه و رفتن به گفت‌وگو با یک شماره تلفن
+</p>
 
-## Important limitation
+<p align="center">
+  <img alt="Android" src="https://img.shields.io/badge/Android-اپلیکیشن موبایل-3DDC84?logo=android&logoColor=white" />
+  <img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-زبان توسعه-7F52FF?logo=kotlin&logoColor=white" />
+  <img alt="Jetpack Compose" src="https://img.shields.io/badge/Jetpack%20Compose-رابط کاربری-4285F4?logo=jetpackcompose&logoColor=white" />
+  <img alt="Material 3" src="https://img.shields.io/badge/Material%203-طراحی مدرن-6750A4" />
+</p>
 
-Traceo does not claim to discover accounts from a phone number unless a service provides a legitimate, verifiable method. Most services do not expose a public account-existence API. The UI reports account status as Unknown rather than guessing. Opening a service link is not proof that an account exists.
+---
 
-## Build and test
+## 📱 Traceo چه کاری انجام می‌دهد؟
 
-The repository includes the Gradle Wrapper, pinned to Gradle 9.8.1. Open the project root (the folder containing `settings.gradle.kts`) in Android Studio and sync Gradle with JDK 17.
+گاهی شماره‌ی فردی را دارید و می‌خواهید در تلگرام، واتساپ یا یک پیام‌رسان دیگر به او پیام بدهید؛ اما نمی‌خواهید شماره را در مخاطبین ذخیره کنید.
 
-On Windows, run:
+**Traceo برای همین موقعیت ساخته شده است.** شماره را وارد می‌کنید، سرویس موردنظرتان را انتخاب می‌کنید و برنامه تلاش می‌کند شما را مستقیماً به همان سرویس و گفت‌وگو هدایت کند.
 
-```powershell
-.\gradlew.bat testDebugUnitTest assembleDebug
+## 🧭 مسیر استفاده
+
+```mermaid
+flowchart TD
+    A["📞 واردکردن شماره تلفن"] --> B["شماره‌سازی و یکسان‌سازی قالب"]
+    B --> C["انتخاب پیام‌رسان"]
+    C --> D["بازکردن لینک یا اپلیکیشن مربوط"]
+    D --> E["💬 ادامه گفتگو در پیام‌رسان"]
 ```
 
-On Linux or macOS, run:
+## ✨ امکانات
 
-```bash
-./gradlew testDebugUnitTest assembleDebug
-```
+- **ورود شماره تلفن:** واردکردن شماره برای شروع مسیر ارتباط.
+- **یکسان‌سازی شماره‌های ایران:** تبدیل شماره‌های ایرانی به قالب استاندارد بین‌المللی ‎`+98`.
+- **انتخاب سرویس:** نمایش سرویس‌های ارتباطی ایرانی و بین‌المللی.
+- **هدایت به پیام‌رسان:** استفاده از لینک مستقیم یا بازکردن اپلیکیشن، در سرویس‌هایی که پشتیبانی می‌شوند.
+- **رابط کاربری ساده:** تمرکز روی ورود شماره و انتخاب سرویس، بدون مراحل اضافه.
 
-GitHub Actions runs the same tests and build and publishes the debug APK as the `traceo-debug-apk` workflow artifact.
+## 🔐 حریم خصوصی و محدودیت‌ها
 
-## Current scope
+Traceo شماره را برای پردازش و ساخت مسیر بازکردن سرویس استفاده می‌کند؛ **شماره تلفن به سرور Traceo ارسال نمی‌شود.**
 
-- Iranian number normalization to E.164 (+98...).
-- Service list grouped into Iranian and international categories.
-- Best-effort open links for WhatsApp, Telegram, and Viber.
-- No phone number is sent to a Traceo server.
+Traceo ادعا نمی‌کند که می‌تواند وجود حساب کاربری یک شماره را در همه‌ی پیام‌رسان‌ها تشخیص دهد. بسیاری از سرویس‌ها API عمومی و قابل‌اتکایی برای بررسی وجود حساب ندارند. بنابراین بازشدن لینک یا اپلیکیشن به‌تنهایی به معنی وجود حساب فعال نیست و وضعیت حساب ممکن است نامشخص بماند.
 
-## Stack
+## 🧩 فناوری‌های مورد استفاده
 
-- Kotlin
-- Jetpack Compose
-- Material 3
-- Android Gradle Plugin 9.4.0
-- Kotlin 2.4.10
+| فناوری | کاربرد |
+|---|---|
+| Kotlin | توسعه‌ی اپلیکیشن اندروید |
+| Jetpack Compose | ساخت رابط کاربری |
+| Material 3 | اجزای بصری و طراحی رابط |
+| Android | بستر اجرای برنامه |
+
+---
+
+<p align="center">
+  <strong>Traceo — یک شماره، یک انتخاب، شروع گفتگو.</strong>
+</p>
